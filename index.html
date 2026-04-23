@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Multi Render + Button</title>
+  <title>Multi Render 9 Data</title>
   <style>
     body {
       font-family: Arial;
@@ -23,10 +23,6 @@
       border-radius: 5px;
     }
 
-    button:hover {
-      background: #0056b3;
-    }
-
     table {
       border-collapse: collapse;
       width: 100%;
@@ -44,6 +40,7 @@
     .card-wrapper {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .card {
@@ -56,7 +53,7 @@
 </head>
 <body>
 
-<h2>Multi Render (Table, Card, List)</h2>
+<h2>Multi Render (9 Data)</h2>
 
 <div class="btn-group">
   <button onclick="render('table')">Table</button>
@@ -67,11 +64,17 @@
 <div id="app"></div>
 
 <script>
-  // ===== DATA =====
+  // ===== DATA (9 ITEM) =====
   const data = [
     { id: 1, nama: "Satu" },
     { id: 2, nama: "Dua" },
-    { id: 3, nama: "Tiga" }
+    { id: 3, nama: "Tiga" },
+    { id: 4, nama: "Empat" },
+    { id: 5, nama: "Lima" },
+    { id: 6, nama: "Enam" },
+    { id: 7, nama: "Tujuh" },
+    { id: 8, nama: "Delapan" },
+    { id: 9, nama: "Sembilan" }
   ];
 
   const columns = [
@@ -79,7 +82,7 @@
     { key: "nama", label: "Nama" }
   ];
 
-  // ===== CORE (DRY) =====
+  // ===== CORE =====
   function createElement(tag, content = "", className = "") {
     const el = document.createElement(tag);
     if (content) el.textContent = content;
@@ -144,23 +147,18 @@
     container.appendChild(ul);
   }
 
-  // ===== MAIN CONTROLLER (SCALABLE) =====
+  // ===== CONTROLLER =====
   function render(type) {
     const app = document.getElementById("app");
-    app.innerHTML = ""; // clear
+    app.innerHTML = "";
 
-    if (type === "table") {
-      renderTable(app);
-    } else if (type === "card") {
-      renderCard(app);
-    } else if (type === "list") {
-      renderList(app);
-    }
+    if (type === "table") renderTable(app);
+    else if (type === "card") renderCard(app);
+    else if (type === "list") renderList(app);
   }
 
-  // ===== DEFAULT VIEW =====
+  // ===== DEFAULT =====
   render("table");
-
 </script>
 
 </body>
