@@ -2,15 +2,29 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Multi Render DRY</title>
+  <title>Multi Render + Button</title>
   <style>
     body {
       font-family: Arial;
       padding: 20px;
     }
 
-    .container {
-      margin-bottom: 40px;
+    .btn-group {
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 8px 12px;
+      margin-right: 10px;
+      border: none;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #0056b3;
     }
 
     table {
@@ -38,22 +52,22 @@
       border-radius: 8px;
       width: 120px;
     }
-
-    ul {
-      padding-left: 20px;
-    }
   </style>
 </head>
 <body>
 
 <h2>Multi Render (Table, Card, List)</h2>
 
-<div id="table-view" class="container"></div>
-<div id="card-view" class="container"></div>
-<div id="list-view" class="container"></div>
+<div class="btn-group">
+  <button onclick="render('table')">Table</button>
+  <button onclick="render('card')">Card</button>
+  <button onclick="render('list')">List</button>
+</div>
+
+<div id="app"></div>
 
 <script>
-  // ===== DATASET =====
+  // ===== DATA =====
   const data = [
     { id: 1, nama: "Satu" },
     { id: 2, nama: "Dua" },
@@ -73,8 +87,8 @@
     return el;
   }
 
-  // ===== TABLE MODULE =====
-  function renderTable(container, columns, data) {
+  // ===== TABLE =====
+  function renderTable(container) {
     const table = createElement("table");
 
     const thead = createElement("thead");
@@ -103,8 +117,8 @@
     container.appendChild(table);
   }
 
-  // ===== CARD MODULE =====
-  function renderCard(container, data) {
+  // ===== CARD =====
+  function renderCard(container) {
     const wrapper = createElement("div", "", "card-wrapper");
 
     data.forEach(item => {
@@ -119,36 +133,33 @@
     container.appendChild(wrapper);
   }
 
-  // ===== LIST MODULE =====
-  function renderList(container, data) {
+  // ===== LIST =====
+  function renderList(container) {
     const ul = createElement("ul");
 
     data.forEach(item => {
-      const li = createElement("li", `ID ${item.id} - ${item.nama}`);
-      ul.appendChild(li);
+      ul.appendChild(createElement("li", `ID ${item.id} - ${item.nama}`));
     });
 
     container.appendChild(ul);
   }
 
-  // ===== MAIN RENDER (SCALABLE) =====
-  function render(type, containerId, data, columns = []) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = "";
+  // ===== MAIN CONTROLLER (SCALABLE) =====
+  function render(type) {
+    const app = document.getElementById("app");
+    app.innerHTML = ""; // clear
 
     if (type === "table") {
-      renderTable(container, columns, data);
+      renderTable(app);
     } else if (type === "card") {
-      renderCard(container, data);
+      renderCard(app);
     } else if (type === "list") {
-      renderList(container, data);
+      renderList(app);
     }
   }
 
-  // ===== INIT =====
-  render("table", "table-view", data, columns);
-  render("card", "card-view", data);
-  render("list", "list-view", data);
+  // ===== DEFAULT VIEW =====
+  render("table");
 
 </script>
 
