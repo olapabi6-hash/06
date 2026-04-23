@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Table Modular DRY</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Table Reusable (DRY, Modular, Scalable)</h2>
+  <div id="table-container"></div>
+
+  <script>
+    // ====== CONFIG (Reusable Schema) ======
+    const columns = [
+      { key: "id", label: "ID" },
+      { key: "nama", label: "Nama" },
+      { key: "umur", label: "Umur", render: (v) => v + " tahun" }
+    ];
+
+    // ====== DATA ======
+    const data = [
+      { id: 1, nama: "Budi", umur: 20 },
+      { id: 2, nama: "Siti", umur: 22 },
+      { id: 3, nama: "Andi", umur: 19 }
+    ];
+
+    // ====== MODULE: CREATE ELEMENT ======
+    function createElement(tag, className = "", content = "") {
+      const el = document.createElement(tag);
+      if (className) el.className = className;
+      if (content !== "") el.textContent = content;
+      return el;
+    }
+
+    // ====== MODULE: RENDER HEADER ======
+    function renderHeader(columns) {
+      const thead = createElement("thead");
+      const tr = createElement("tr");
+
+      columns.forEach(col => {
+        const th = createElement("th", "", col.label);
+        tr.appendChild(th);
+      });
+
+      thead.appendChild(tr);
+      return thead;
+    }
+
+    // ====== MODULE: RENDER BODY ======
+    function renderBody(data, columns) {
+      const tbody = createElement("tbody");
+
+      data.forEach(row => {
+        const tr = createElement("tr");
+
+        columns.forEach(col => {
+          let value = row[col.key];
+
+          // support custom render (scalable)
+          if (col.render) {
+            value = col.render(value, row);
+          }
+
+          const td = createElement("td", "", value);
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      return tbody;
+    }
+
+    // ====== MAIN FUNCTION (DRY CORE) ======
+    function renderTable(containerId, columns, data) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = ""; // clear for re-render
+
+      const table = createElement("table");
+
+      table.appendChild(renderHeader(columns));
+      table.appendChild(renderBody(data, columns));
+
+      container.appendChild(table);
+    }
+
+    // ====== INIT ======
+    renderTable("table-container", columns, data);
+
+  </script>
+
+</body>
+</html>
